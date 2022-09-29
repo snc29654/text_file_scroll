@@ -55,23 +55,25 @@ class main_class():
         self.textExample.insert(tkinter.END,message)
 
     def thread_method(self):
+        while(1):
+            self.textExample.delete("1.0",tkinter.END)
 
-        for name in self.filenames:
+            for name in self.filenames:
     
-            with open(name, 'rb') as f:  # バイナリファイルとしてファイルをオープン
-                b = f.read()  # ファイルの内容を全て読み込む
+                with open(name, 'rb') as f:  # バイナリファイルとしてファイルをオープン
+                    b = f.read()  # ファイルの内容を全て読み込む
 
-            enc = detect(b)
-            self.encode_type=enc['encoding']
-            with open(name,encoding=self.encode_type) as f:
+                enc = detect(b)
+                self.encode_type=enc['encoding']
+                with open(name,encoding=self.encode_type) as f:
 
 
-                lines = f.readlines()
-                for line in lines:
-                    print(line, end='')
-                    self.textExample.insert(tkinter.END,str(line)+"\n")
-                    time.sleep(0.5)
-                    self.textExample.yview_moveto(1)
+                    lines = f.readlines()
+                    for line in lines:
+                        print(line, end='')
+                        self.textExample.insert(tkinter.END,str(line)+"\n")
+                        time.sleep(0.5)
+                        self.textExample.yview_moveto(1)
 
     def button3_clicked(self):  
 
