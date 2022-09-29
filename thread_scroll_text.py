@@ -39,15 +39,18 @@ class main_class():
         print ("__init__")  
         button1= Button(root, text=u'終了', command=self.quit)  
         button1.grid(row=0, column=1)  
-        button1.place(x=250, y=30) 
+        button1.place(x=300, y=30) 
         self.textExample=ScrolledText(root, height=30,width=120, wrap=tkinter.CHAR)
         self.textExample.pack()
         self.textExample.place(x=90, y=70)
 
-        button3= Button(root, text=u'ファイル   選択', command=self.button3_clicked)  
+        button3= Button(root, text=u'ファイル   選択', command=self.button3_clicked) 
         button3.grid(row=0, column=1)  
         button3.place(x=100, y=30) 
 
+        button4= Button(root, text=u'中断', command=self.button4_clicked)  
+        button4.grid(row=0, column=1)  
+        button4.place(x=250, y=30) 
 
 
     def method0(self,message):  
@@ -56,9 +59,13 @@ class main_class():
 
     def thread_method(self):
         while(1):
+            if(self.kill==1):
+                break
             self.textExample.delete("1.0",tkinter.END)
 
             for name in self.filenames:
+                if(self.kill==1):
+                    break
     
                 with open(name, 'rb') as f:  # バイナリファイルとしてファイルをオープン
                     b = f.read()  # ファイルの内容を全て読み込む
@@ -66,10 +73,15 @@ class main_class():
                 enc = detect(b)
                 self.encode_type=enc['encoding']
                 with open(name,encoding=self.encode_type) as f:
+                    if(self.kill==1):
+                        break
 
 
                     lines = f.readlines()
                     for line in lines:
+                        if(self.kill==1):
+                            break
+
                         print(line, end='')
                         self.textExample.insert(tkinter.END,str(line)+"\n")
                         time.sleep(0.5)
@@ -82,11 +94,14 @@ class main_class():
         iDir = os.path.abspath(os.path.dirname(__file__)) 
         self.filenames = tkFileDialog.askopenfilenames(filetypes= [("Text file", ".txt")], initialdir=iDir)
         print(self.filenames)
+        self.kill = 0  
 
         thread1 = threading.Thread(target=self.thread_method)
         thread1.start()
 
 
+    def button4_clicked(self):
+        self.kill = 1  
 
 
 
