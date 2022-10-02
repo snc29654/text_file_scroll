@@ -38,6 +38,7 @@ class main_class():
     def __init__(self, main):
         print ("__init__")  
         self.interval=0.5
+        self.kill = 0
 
         button1= Button(root, text=u'終了', command=self.quit)  
         button1.grid(row=0, column=1)  
@@ -72,6 +73,9 @@ class main_class():
 
     def thread_method(self):
         while(1):
+            if(self.kill==1):
+                break        
+
             if(self.stop==1):
                 while(1):
                     time.sleep(1)
@@ -80,9 +84,13 @@ class main_class():
                 self.textExample.delete("1.0",tkinter.END)
 
             for name in self.filenames:
+                if(self.kill==1):
+                    break        
                 if(self.stop==1):
                     while(1):
                         time.sleep(1)
+                        if(self.kill==1):
+                            break        
                         if(self.stop==0):
                             break    
     
@@ -95,15 +103,22 @@ class main_class():
                     if(self.stop==1):
                         while(1):
                             time.sleep(1)
+                            if(self.kill==1):
+                                break        
                             if(self.stop==0):
                                 break    
 
 
                     lines = f.readlines()
                     for line in lines:
+                        if(self.kill==1):
+                            break        
+
                         if(self.stop==1):
                             while(1):
                                 time.sleep(1)
+                                if(self.kill==1):
+                                    break        
                                 if(self.stop==0):
                                     break    
 
@@ -114,12 +129,15 @@ class main_class():
 
     def button3_clicked(self):  
 
+        self.kill = 1
 
         fTyp = [('', '*')] 
         iDir = os.path.abspath(os.path.dirname(__file__)) 
         self.filenames = tkFileDialog.askopenfilenames(filetypes= [("Text file", ".txt")], initialdir=iDir)
         print(self.filenames)
         self.stop = 0  
+        self.kill = 0
+        self.textExample.delete("1.0",tkinter.END)
 
         thread1 = threading.Thread(target=self.thread_method)
         thread1.start()
