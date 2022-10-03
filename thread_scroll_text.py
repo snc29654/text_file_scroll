@@ -39,7 +39,7 @@ class main_class():
         print ("__init__")  
         self.interval=0.5
         self.kill = 0
-        self.font=12
+        self.font=10
         button1= Button(root, text=u'終了', command=self.quit)  
         button1.grid(row=0, column=1)  
         button1.place(x=600, y=30) 
@@ -182,7 +182,7 @@ class main_class():
 root= tkinter.Tk()  
 c=main_class(root)  
 root.title("テキストスクロール")  
-root.geometry("1000x500") 
+root.geometry("1100x600") 
 
 
 root.mainloop()
