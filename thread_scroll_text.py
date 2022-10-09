@@ -44,7 +44,7 @@ class main_class():
         self.font=10
         button1= Button(root, text=u'終了', command=self.quit)  
         button1.grid(row=0, column=1)  
-        button1.place(x=800, y=30) 
+        button1.place(x=900, y=30) 
         self.textExample=ScrolledText(root, width=self.w,height=self.h, wrap=tkinter.CHAR)
         self.textExample.pack()
         self.textExample.place(x=90, y=70)
@@ -87,26 +87,52 @@ class main_class():
         button11.grid(row=0, column=1)  
         button11.place(x=650, y=30) 
 
-
     def method0(self,message):  
         print ("method0")  
         self.textExample.insert(tkinter.END,message)
 
     def thread_method(self):
-        while(1):
+        loop_flag=px_v.get()
+        print ("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx")  
+        print(loop_flag)
+        if(loop_flag==1):
+            self.text_main()
+        else:
+            while(1):
+                if(self.kill==1):
+                    break        
+                self.text_main()
+
+
+        
+                        
+    def text_main(self):
+
+
+        if(self.stop==1):
+            while(1):
+                time.sleep(1)
+                if(self.stop==0):
+                    break    
+            self.textExample.delete("1.0",tkinter.END)
+
+        for name in self.filenames:
             if(self.kill==1):
                 break        
-
             if(self.stop==1):
                 while(1):
                     time.sleep(1)
+                    if(self.kill==1):
+                        break        
                     if(self.stop==0):
                         break    
-                self.textExample.delete("1.0",tkinter.END)
 
-            for name in self.filenames:
-                if(self.kill==1):
-                    break        
+            with open(name, 'rb') as f:  # バイナリファイルとしてファイルをオープン
+                b = f.read()  # ファイルの内容を全て読み込む
+
+            enc = detect(b)
+            self.encode_type=enc['encoding']
+            with open(name,encoding=self.encode_type) as f:
                 if(self.stop==1):
                     while(1):
                         time.sleep(1)
@@ -114,13 +140,13 @@ class main_class():
                             break        
                         if(self.stop==0):
                             break    
-    
-                with open(name, 'rb') as f:  # バイナリファイルとしてファイルをオープン
-                    b = f.read()  # ファイルの内容を全て読み込む
 
-                enc = detect(b)
-                self.encode_type=enc['encoding']
-                with open(name,encoding=self.encode_type) as f:
+
+                lines = f.readlines()
+                for line in lines:
+                    if(self.kill==1):
+                        break        
+
                     if(self.stop==1):
                         while(1):
                             time.sleep(1)
@@ -129,25 +155,11 @@ class main_class():
                             if(self.stop==0):
                                 break    
 
-
-                    lines = f.readlines()
-                    for line in lines:
-                        if(self.kill==1):
-                            break        
-
-                        if(self.stop==1):
-                            while(1):
-                                time.sleep(1)
-                                if(self.kill==1):
-                                    break        
-                                if(self.stop==0):
-                                    break    
-
-                        print(line, end='')
-                        self.textExample.insert(tkinter.END,str(line)+"\n")
-                        self.textExample.configure(font=("Courier", self.font),height=self.h,width=self.w)
-                        time.sleep(self.interval)
-                        self.textExample.yview_moveto(1)
+                    print(line, end='')
+                    self.textExample.insert(tkinter.END,str(line)+"\n")
+                    self.textExample.configure(font=("Courier", self.font),height=self.h,width=self.w)
+                    time.sleep(self.interval)
+                    self.textExample.yview_moveto(1)
 
     def button3_clicked(self):  
 
@@ -201,6 +213,25 @@ root= tkinter.Tk()
 c=main_class(root)  
 root.title("テキストスクロール")  
 root.geometry("1100x600") 
+
+px_v = tkinter.IntVar(value=1)
+
+
+px_radio_1 = tkinter.Radiobutton(
+    root,
+    text="繰り返し無し",
+    value=1,
+    variable=px_v
+)
+px_radio_1.place(x=700, y=30)
+
+px_radio_2 = tkinter.Radiobutton(
+    root,
+    text="繰り返しあり",
+    value=2,
+    variable=px_v
+)
+px_radio_2.place(x=800, y=30)
 
 
 root.mainloop()
