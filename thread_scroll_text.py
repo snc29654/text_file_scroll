@@ -92,7 +92,7 @@ class main_class():
         self.textExample.insert(tkinter.END,message)
 
     def thread_method(self):
-        loop_flag=px_v.get()
+        loop_flag=loop_v.get()
         print ("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx")  
         print(loop_flag)
         if(loop_flag==1):
@@ -214,14 +214,14 @@ c=main_class(root)
 root.title("テキストスクロール")  
 root.geometry("1100x600") 
 
-px_v = tkinter.IntVar(value=1)
+loop_v = tkinter.IntVar(value=1)
 
 
 px_radio_1 = tkinter.Radiobutton(
     root,
     text="繰り返し無し",
     value=1,
-    variable=px_v
+    variable=loop_v
 )
 px_radio_1.place(x=700, y=30)
 
@@ -229,7 +229,7 @@ px_radio_2 = tkinter.Radiobutton(
     root,
     text="繰り返しあり",
     value=2,
-    variable=px_v
+    variable=loop_v
 )
 px_radio_2.place(x=800, y=30)
 
